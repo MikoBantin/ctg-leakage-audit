@@ -1,0 +1,5 @@
+Config,CV Accuracy,CV Std,Test Accuracy,Balanced Accuracy,Macro F1,ROC-AUC OvR,ECE,Recall Normal,Recall Suspect,Recall Pathological
+A — Correct (no leakage),0.9418,0.0078,0.9202,0.8621,0.8549,0.9809,0.0353,0.9548,0.7458,0.8857
+B — +L4 (scaler before split),0.9453,0.0092,0.9296,0.8754,0.87,0.9819,0.0367,0.9608,0.7797,0.8857
+C — +L1+L4 (SMOTE+scaler before split),0.9786,0.0031,0.9698,0.9708,0.9699,0.9973,0.0261,0.9377,0.9779,0.9969
+D — +L1+L2+L4 (full naive),0.9799,0.0048,0.9698,0.9708,0.9699,0.9973,0.0261,0.9377,0.9779,0.9969
