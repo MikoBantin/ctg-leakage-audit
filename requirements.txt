@@ -1,5 +1,6 @@
 # core — pinned to versions in .venv
 imbalanced-learn==0.14.2
+scipy==1.18.0
 jupyter==1.1.1
 matplotlib==3.11.0
 numpy==2.4.6

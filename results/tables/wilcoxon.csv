@@ -1,0 +1,4 @@
+model,correct_cv_mean,naive_cv_mean,gap_pp,wilcoxon_stat,p_value,significant
+RF,0.9374,0.9783,4.1,55.0,0.001,True
+XGB,0.9454,0.9822,3.68,55.0,0.001,True
+SVM,0.8819,0.9393,5.74,55.0,0.001,True
