@@ -46,7 +46,8 @@ improvement must clearly exceed.
 
 **Common failure (L1):** Many published CTG papers apply SMOTE to the full dataset
 *before* splitting. Synthetic samples derived from test-set rows then appear in training,
-inflating CV accuracy by ~3–4 percentage points in this dataset.
+inflating CV accuracy by 3.7–5.7 pp across RF, XGBoost, and SVM
+(Wilcoxon p=0.001, 10/10 seeds naive > correct for all three models).
 
 ---
 
@@ -76,7 +77,7 @@ Use `imblearn.pipeline.Pipeline` to prevent this.
 
 **Common failure (L4):** Fitting a scaler on the full dataset (train + test) before
 splitting causes the model to use test-set statistics during training. Effect on this
-dataset: ~0.3 pp CV accuracy inflation.
+dataset: ≤0.1 pp CV accuracy inflation across all three models tested.
 
 ---
 
@@ -107,23 +108,24 @@ reporting held-out accuracy.
 
 | Metric | Correct pipeline | Naive pipeline | Delta |
 |---|---|---|---|
-| CV Accuracy | 94.2% | 98.0% | −3.8 pp |
-| Test Accuracy | 92.0% | 97.0% | −5.0 pp |
-| Balanced Accuracy | 86.2% | 97.1% | −10.9 pp |
-| Macro F1 | 85.5% | 97.0% | −11.5 pp |
-| Recall — Normal | 95.5% | 93.8% | +1.7 pp |
-| Recall — Suspect | **74.6%** | **97.8%** | **−23.2 pp** |
-| Recall — Pathological | 88.6% | 99.7% | −11.1 pp |
+| CV Accuracy — RF | 93.7% ± 0.4% | 97.8% ± 0.1% | −4.1 pp |
+| CV Accuracy — XGB | 94.5% ± 0.4% | 98.2% ± 0.1% | −3.7 pp |
+| CV Accuracy — SVM | 88.2% ± 0.5% | 93.9% ± 0.2% | −5.7 pp |
+| Balanced Accuracy (RF) | 90.5% | 97.7% | −7.2 pp |
+| Macro F1 (RF) | 90.3% | 97.7% | −7.4 pp |
+| Recall — Suspect (RF/XGB) | **~81%** | **~97%** | **~−16 pp** |
+| Recall — Pathological (RF) | 93.7% | 99.8% | −6.1 pp |
+| Wilcoxon p (all models) | — | — | **0.001** |
 
 **Common failure (L5):** Reporting only plain accuracy on a 78/14/8 split hides the
 collapse of Suspect-class recall. The naive pipeline appears to achieve ~99% accuracy
-while missing 25% of Suspect cases on the corrected evaluation.
+while missing ~13–19% of Suspect cases on the corrected evaluation (model-dependent).
 
 ---
 
 ## 7. Reproducibility
 
-- [x] All random seeds pinned (seed = 42 throughout)
+- [x] All random seeds pinned and reported; results averaged across 10 seeds (0–9)
 - [x] Code publicly released with open licence
 - [x] `requirements.txt` with pinned package versions provided
 - [x] Python version stated (3.13.3)
@@ -136,7 +138,7 @@ while missing 25% of Suspect cases on the corrected evaluation.
 | scikit-learn | 1.9.0 | |
 | imbalanced-learn | 0.14.2 | |
 | xgboost | 3.3.0 | |
-| Random seed | 42 (all components) | |
+| Random seed | 0–9 (10-seed sweep; mean ± std reported) | |
 | Code repository | github.com/MikoBantin/ctg-leakage-audit | |
 
 ---
@@ -156,8 +158,8 @@ State these explicitly to bound your claims:
 
 | ID | Source | Effect on this dataset |
 |---|---|---|
-| L1 | SMOTE before train/test split | +3.3 pp CV accuracy |
-| L2 | CV on full resampled pool | +0.1 pp CV accuracy |
+| L1 | SMOTE before train/test split | +3.3–5.3 pp CV accuracy (RF/XGB/SVM) |
+| L2 | CV on full resampled pool | <0.3 pp CV accuracy |
 | L3 | Duplicate rows across splits | 5 rows; minor |
-| L4 | Scaler fit on full dataset | +0.3 pp CV accuracy |
-| L5 | Plain accuracy on imbalanced test | Hides −23 pp Suspect recall |
+| L4 | Scaler fit on full dataset | ≤0.1 pp CV accuracy |
+| L5 | Plain accuracy on imbalanced test | Hides ~13–19 pp Suspect recall gap |
